@@ -1,6 +1,6 @@
 ---
 title: "ESM 232 Assignment 8"
-author: "Madeline Oliver, Jennifer Truong"
+author: "Madeline Oliver, Jennifer Truong, Alex Milward"
 date: "5/19/2021"
 output: pdf_document
 ---
