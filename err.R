@@ -6,12 +6,14 @@
 #' 
 #' @param  m  expected value estimated by model 
 #' @param  o  actual value observed
-#' @return err
+#' @return mean_err - average percent error between model and observations
 
 
 err = function(m,o) {
-  err = (abs((o-m)/m)) * 100
+  err = (abs((o-m)/m)) 
+  pct_err = err*100
+  mean_err = mean(pct_err)
   
-  return(err)
+  return(mean_err)
 }
 

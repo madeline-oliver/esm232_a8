@@ -14,7 +14,7 @@ library(lubridate)
 
 # Develop your performance metric
 
-Our metric is BIAS or Percent Error (Err)
+Our metric is BIAS or Percent Error (Err). We'll be calculating average percent error for the whole dataset.
 
 ```{r}
 # Code metric as a function
