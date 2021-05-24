@@ -18,13 +18,15 @@ Our metric is BIAS or Percent Error (Err). We'll be calculating average percent 
 
 ```{r}
 # Code metric as a function
-source("err.r")
+source("err.R")
+source("nse.R")
 
 # read in data
 sager = read.table("sager.txt", header=T)
 head(sager)
 
 msage = read.table("sagerm.txt", header=T)
+head(msage)
 
 ```
 
@@ -56,11 +58,17 @@ msage$obs = sager$obs
 # to turn all the columns of different outputs into a single column identified by "run"
 msagel = msage %>% gather(key="run",value="streamflow", -date, -month, -day, -year, -wy, -obs)
 
+plot <- ggplot(subset(msagel, wy == 1970), aes(as.Date(date), streamflow, col = run)) +
+  geom_line() +
+  theme(legend.position = "none")
+plot
+
 # compute performance measures for all output
 res = msage %>% 
   select(-date, -month, -day, -year, -wy, -obs) %>% 
   map_dbl(~err(m=.x, o=msage$obs))
 
+res
 summary(res)
 
 ```
@@ -96,6 +104,8 @@ ggplot(results, aes(err)) +
   geom_boxplot() +
   labs(x = "Err") +
   theme_minimal()
+
+min(results$simnames)
 
 ```
 ```

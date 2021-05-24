@@ -10,7 +10,7 @@
 
 
 err = function(m,o) {
-  err = (abs((o-m)/m)) 
+  err = (abs((o-m)/o)) # changed (o-m)/m to (o-m)/o if we are considering observed to be true value to which we are comparing the model
   pct_err = err*100
   mean_err = mean(pct_err)
   
