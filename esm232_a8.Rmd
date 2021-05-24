@@ -17,7 +17,7 @@ library(lubridate)
 Our metric is BIAS or Percent Error (Err). We'll be calculating average percent error for the whole dataset.
 
 ```{r}
-# Code metric as a function
+# 1. Code metric as a function
 source("err.R")
 source("nse.R")
 
@@ -63,7 +63,7 @@ plot <- ggplot(subset(msagel, wy == 1970), aes(as.Date(date), streamflow, col = 
   theme(legend.position = "none")
 plot
 
-# compute performance measures for all output
+# 2. Apply performance metric to the streamflow data provided in sagerm
 res = msage %>% 
   select(-date, -month, -day, -year, -wy, -obs) %>% 
   map_dbl(~err(m=.x, o=msage$obs))
@@ -74,41 +74,46 @@ summary(res)
 ```
 
 ```{r}
+source("check_minannual.R")
 # if we want to keep track of which statistics is associated with each run, we need a unique identifies
 # a ID that tracks each model output - lets use the column names
 simnames = names(msage %>% select(-date, -month, -day,-year,-wy, -obs))
 results = cbind.data.frame(simnames=simnames, err=res)
 # another example using our low flow statistics
 # use apply to compute for all the data
-res = msage %>% select(-date, -month, -day, -year, -wy, -obs ) %>% map_dbl(~check_minannual( o=msage$obs, 
-                                                                                             month=msage$month, 
-                                                                                             day=msage$day, 
-                                                                                             year=msage$year, wy=msage$wy, 
-                                                                                             m=.x))
+res = msage %>% 
+  select(-date, -month, -day, -year, -wy, -obs ) %>% 
+  map_dbl(~check_minannual(o=msage$obs,
+                           month=msage$month,
+                           day=msage$day,
+                           year=msage$year, 
+                           wy=msage$wy, 
+                           m=.x))
 # add to our results
 results$minannual_cor = res
 ```
 
-Find the simulation that gives the best performance (record that and add to the quiz on gauchospace)
+
 ```{r}
-# interesting to look at range of metrics - could use this to decide on acceptable values
+# 3. Find the simulation that gives the best performance (record that and add to the quiz on gauchospace)
 summary(results)
 
 ```
-Simulation ??  has the min number for Err.
+Simulation 100.1  has the minimum number for Err.
 
-Create boxplot of metric applied to sagerm.txt
+
 ```{r}
-# graph err values
+# 4. Create a boxplot of your metric applied to sagerm.txt
+
 ggplot(results, aes(err)) +
   geom_boxplot() +
   labs(x = "Err") +
   theme_minimal()
 
-min(results$simnames)
+# min(results$simnames)
 
 ```
-```
+
 
 
 
